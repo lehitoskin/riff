@@ -6,6 +6,12 @@
 
 (define-ffi-definer define/flif (ffi-lib "libflif"))
 
+; The _string type supports conversion between Racket strings
+; and char* strings using a parameter-determined conversion.
+; instead of using _bytes, which is unnatural, use _string
+; of specified type _string*/utf-8.
+(default-_string-type _string*/utf-8)
+
 (define _FLIF-IMAGE (_cpointer 'FLIF-IMAGE))
 
 (define/flif flif-create-image
@@ -20,7 +26,7 @@
         -> _FLIF-IMAGE)
   #:c-id flif_create_image_HDR)
 
-(define/flif flif-import-image-rgba
+(define/flif flif-import-image-rgba!
   (_fun [width : _uint32]
         [height : _uint32]
         [rgba : _bytes]
@@ -28,7 +34,7 @@
         -> _FLIF-IMAGE)
   #:c-id flif_import_image_RGBA)
 
-(define/flif flif-import-image-rgb
+(define/flif flif-import-image-rgb!
   (_fun [width : _uint32]
         [height : _uint32]
         [rgb : _bytes]
@@ -36,7 +42,7 @@
         -> _FLIF-IMAGE)
   #:c-id flif_import_image_RGB)
 
-(define/flif flif-import-image-gray
+(define/flif flif-import-image-gray!
   (_fun [width : _uint32]
         [height : _uint32]
         [gray : _bytes]
@@ -44,7 +50,7 @@
         -> _FLIF-IMAGE)
   #:c-id flif_import_image_GRAY)
 
-(define/flif flif-destroy-image (_fun [image : _FLIF-IMAGE] -> _void)
+(define/flif flif-destroy-image! (_fun [image : _FLIF-IMAGE] -> _void)
   #:c-id flif_destroy_image)
 
 (define/flif flif-image-get-width (_fun [image : _FLIF-IMAGE] -> _uint32)
@@ -62,13 +68,13 @@
 (define/flif flif-image-get-frame-delay (_fun [image : _FLIF-IMAGE] -> _uint32)
   #:c-id flif_image_get_frame_delay)
 
-(define/flif flif-image-set-frame-delay
+(define/flif flif-image-set-frame-delay!
   (_fun [image : _FLIF-IMAGE]
         [frame-delay : _uint32]
         -> _void)
   #:c-id flif_image_set_frame_delay)
 
-(define/flif flif-image-set-metadata
+(define/flif flif-image-set-metadata!
   (_fun [image : _FLIF-IMAGE]
         [chunkname : _string]
         [data : _bytes]
@@ -86,13 +92,13 @@
         -> _void)
   #:c-id flif_image_get_metadata)
 
-(define/flif flif-image-free-metadata
+(define/flif flif-image-free-metadata!
   (_fun [image : _FLIF-IMAGE]
         [data : _bytes]
         -> _void)
   #:c-id flif_image_free_metadata)
 
-(define/flif flif-image-write-row-rgba8
+(define/flif flif-image-write-row-rgba8!
   (_fun [image : _FLIF-IMAGE]
         [row : _uint32]
         [buffer : _bytes]
@@ -109,7 +115,7 @@
         -> _void)
   #:c-id flif_image_read_row_RGBA8)
 
-(define/flif flif-image-write-row-rgba16
+(define/flif flif-image-write-row-rgba16!
   (_fun [image : _FLIF-IMAGE]
         [row : _uint32]
         [buffer : _bytes]
@@ -128,5 +134,5 @@
 
 ; buffer is originally void*, so this might not be needed when
 ; programming in racket?
-(define/flif flif-free-memory (_fun [buffer : _bytes] -> _void)
+(define/flif flif-free-memory! (_fun [buffer : _bytes] -> _void)
   #:c-id flif_free_memory)
