@@ -12,7 +12,16 @@
 ; of specified type _string*/utf-8.
 (default-_string-type _string*/utf-8)
 
-(define _FLIF-IMAGE (_cpointer 'FLIF-IMAGE))
+(define _FLIF-IMAGE (_cpointer 'FLIF-IMAGE _gcpointer))
+
+(define (flif? img)
+  (define in
+    (cond [(bytes? img) (open-input-bytes img)]
+          [(path-string? img) (open-input-file img)]
+          [else (open-input-bytes #"")]))
+  (define header (peek-bytes 4 0 in))
+  (close-input-port in)
+  (and (not (eof-object? header)) (bytes=? header #"FLIF")))
 
 (define/flif flif-create-image
   (_fun [width : _uint32]

@@ -13,8 +13,8 @@
 ; of specified type _string*/utf-8.
 (default-_string-type _string*/utf-8)
 
-(define _FLIF-DECODER (_cpointer 'FLIF-DECODER))
-(define _FLIF-INFO (_cpointer/null 'FLIF-INFO))
+(define _FLIF-DECODER (_cpointer 'FLIF-DECODER _gcpointer))
+(define _FLIF-INFO (_cpointer/null 'FLIF-INFO _gcpointer))
 
 ; initialize a flif decoder
 (define/dec flif-create-decoder
@@ -49,7 +49,7 @@
 (define/dec flif-decoder-get-image
   (_fun [decoder : _FLIF-DECODER]
         [index : _size]
-        -> _FLIF-IMAGE) ; _FLIF-IMAGE
+        -> _FLIF-IMAGE)
   #:c-id flif_decoder_get_image)
 
 ; release a decoder (has to be run to avoid memory leaks)
