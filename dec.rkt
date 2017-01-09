@@ -25,14 +25,14 @@
 (define/dec flif-decoder-decode-file!
   (_fun [decoder : _FLIF-DECODER]
         [filename : _string]
-        -> _bool) ; _int32
+        -> _bool)
   #:c-id flif_decoder_decode_file)
 
 (define/dec flif-decoder-decode-memory!
   (_fun [decoder : _FLIF-DECODER]
         [buffer : _bytes]
         [size : _size = (bytes-length buffer)]
-        -> _bool) ; _int32
+        -> _bool)
   #:c-id flif_decoder_decode_memory)
 
 ; returns the number of frames

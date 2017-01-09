@@ -8,5 +8,5 @@
 
 (define required-core-version "6.1")
 
-(define deps '("base" "scribble-lib"))
+(define deps '("base" "draw-lib" "scribble-lib"))
 (define build-deps '("racket-doc"))

@@ -38,7 +38,8 @@
   (_fun [encoder : _FLIF-ENCODER]
         [buffer : _bytes]
         [size : _size = (bytes-length buffer)]
-        -> _int32)
+        -> _int32
+        -> buffer)
   #:c-id flif_encoder_encode_memory)
 
 ; release an encoder (has to be called to prevent memory leaks)
@@ -69,7 +70,7 @@
         -> _void)
   #:c-id flif_encoder_set_auto_color_buckets)
 
-; default: 512
+; default: 512 (max palette size)
 (define/enc flif-encoder-set-palette-size!
   (_fun [encoder : _FLIF-ENCODER]
         [size : _int32]
