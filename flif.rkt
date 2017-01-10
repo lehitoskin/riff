@@ -78,7 +78,7 @@
         -> _FLIF-IMAGE)
   #:c-id flif_import_image_GRAY)
 
-(define/flif flif-import-image-palette
+(define/flif flif-import-image-palette!
   (_fun [width : _uint32]
         [height : _uint32]
         [gray : _bytes]
@@ -151,9 +151,12 @@
 (define/flif flif-image-get-metadata
   (_fun [image : _FLIF-IMAGE]
         [chunkname : _string]
-        [data : _bytes]
-        [len : _size = (bytes-length data)]
-        -> _void)
+        [data : (_ptr o _gcpointer)]
+        [len : (_box _size)]
+        -> _void
+        -> (for/fold ([bstr #""])
+                     ([i (in-range (unbox len))])
+             (bytes-append bstr (ptr-ref data _byte i))))
   #:c-id flif_image_get_metadata)
 
 (define/flif flif-image-free-metadata!
