@@ -84,7 +84,7 @@
         [gray : _bytes]
         [stride : _uint32]
         -> _FLIF-IMAGE)
-  #:c-id flif_import_image_palette)
+  #:c-id flif_import_image_PALETTE)
 
 (define/flif flif-destroy-image!
   (_fun [image : _FLIF-IMAGE] -> _void)

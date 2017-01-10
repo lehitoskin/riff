@@ -2,8 +2,12 @@
 ; dec.rkt
 (require ffi/unsafe
          ffi/unsafe/define
+         (rename-in racket/contract [-> =>])
          "flif.rkt")
-(provide (except-out (all-defined-out) define/dec))
+(provide (except-out (all-defined-out)
+                     define/dec
+                     flif-data-pos
+                     read-dimension))
 
 (define-ffi-definer define/dec (ffi-lib "libflif_dec"))
 
@@ -137,6 +141,37 @@ control.
 (define/dec flif-destroy-info!
   (_fun [info : _FLIF-INFO] -> _void)
   #:c-id flif_destroy_info)
+
+; get the image's dimensions as a list
+
+; read until the first \0
+(define (flif-data-pos img)
+  (define in (if (bytes? img)
+                 (open-input-bytes img)
+                 (open-input-file img)))
+  (define pos (regexp-match-positions (byte-regexp (bytes 0)) in))
+  (close-input-port in)
+  (car pos))
+
+(define (read-dimension bstr [result 0] [pos 0])
+  (define byte (bytes-ref bstr pos))
+  (if (< byte #x80)
+      (list (+ pos 1) (+ result #x80))
+      (read-dimension bstr (arithmetic-shift (+ result (- byte #x80)) 7) (+ pos 1))))
+
+(define/contract (flif-dimensions img)
+  (flif? . => . list?)
+  (define in (if (bytes? img)
+                 (open-input-bytes img)
+                 (open-input-file img)))
+  (define pos (flif-data-pos img))
+  (define before (peek-bytes (car pos) 0 in))
+  ; contains the width, height, (channels, bit-depth, and animation frames)
+  (define w+h+f (subbytes before 6))
+  (close-input-port in)
+  (define width (read-dimension w+h+f))
+  (define height (read-dimension (subbytes w+h+f (car width))))
+  (append (cdr width) (cdr height)))
 
 ; get the image width
 (define/dec flif-info-get-width

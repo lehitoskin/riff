@@ -30,20 +30,25 @@
 (define/enc flif-encoder-encode-file!
   (_fun [encoder : _FLIF-ENCODER]
         [filename : _string]
-        -> _int32)
+        -> _bool)
   #:c-id flif_encoder_encode_file)
 
 ; encode to memory
 (define/enc flif-encoder-encode-memory!
   (_fun [encoder : _FLIF-ENCODER]
-        [buffer : _bytes]
-        [size : _size = (bytes-length buffer)]
-        -> _int32
-        -> buffer)
+        [buffer : (_ptr o _gcpointer)]
+        [size : (_box _size) = (box 0)]
+        -> (success : _bool)
+        -> (cond [success
+                  (for/fold ([bstr #""])
+                            ([i (in-range (unbox size))])
+                    (bytes-append bstr (bytes (ptr-ref buffer _byte i))))]
+                 [else (raise-result-error 'flif-encoder-encode-memory! #t success)]))
   #:c-id flif_encoder_encode_memory)
 
 ; release an encoder (has to be called to prevent memory leaks)
-(define/enc flif-destroy-encoder! (_fun [encoder : _FLIF-ENCODER] -> _void)
+(define/enc flif-destroy-encoder!
+  (_fun [encoder : _FLIF-ENCODER] -> _void)
   #:c-id flif_destroy_encoder)
 
 ; encoder options
