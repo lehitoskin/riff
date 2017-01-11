@@ -154,14 +154,16 @@
         [data : (_ptr o _gcpointer)]
         [len : (_box _size)]
         -> _void
-        -> (for/fold ([bstr #""])
-                     ([i (in-range (unbox len))])
-             (bytes-append bstr (ptr-ref data _byte i))))
+        -> (let ()
+             (flif-image-free-metadata! image data)
+             (for/fold ([bstr #""])
+                       ([i (in-range (unbox len))])
+               (bytes-append bstr (ptr-ref data _byte i)))))
   #:c-id flif_image_get_metadata)
 
 (define/flif flif-image-free-metadata!
   (_fun [image : _FLIF-IMAGE]
-        [data : _bytes]
+        [data : _gcpointer]
         -> _void)
   #:c-id flif_image_free_metadata)
 
@@ -174,10 +176,11 @@
   #:c-id flif_image_write_row_PALETTE8)
 
 (define/flif flif-image-read-row-palette8
-  (_fun [image : _FLIF-IMAGE]
+  (_fun (image row len) ::
+        [image : _FLIF-IMAGE]
         [row : _uint32]
-        [buffer : _bytes]
-        [len : _size = (bytes-length buffer)]
+        [buffer : (_bytes o len)]
+        [len : _size]
         -> _void)
   #:c-id flif_image_read_row_PALETTE8)
 
@@ -190,10 +193,11 @@
   #:c-id flif_image_write_row_GRAY8)
 
 (define/flif flif-image-read-row-gray8
-  (_fun [image : _FLIF-IMAGE]
+  (_fun (image row len) ::
+        [image : _FLIF-IMAGE]
         [row : _uint32]
-        [buffer : _bytes]
-        [len : _size = (bytes-length buffer)]
+        [buffer : (_bytes o len)]
+        [len : _size]
         -> _void)
   #:c-id flif_image_read_row_GRAY8)
 
@@ -207,10 +211,11 @@
 
 ; see flif-image-get-metadata
 (define/flif flif-image-read-row-rgba8
-  (_fun [image : _FLIF-IMAGE]
+  (_fun (image row len) ::
+        [image : _FLIF-IMAGE]
         [row : _uint32]
-        [buffer : _bytes]
-        [len : _size = (bytes-length buffer)]
+        [buffer : (_bytes o len)]
+        [len : _size]
         -> _void)
   #:c-id flif_image_read_row_RGBA8)
 
@@ -224,15 +229,16 @@
 
 ; see flif-image-get-metadata
 (define/flif flif-image-read-row-rgba16
-  (_fun [image : _FLIF-IMAGE]
+  (_fun (image row len) ::
+        [image : _FLIF-IMAGE]
         [row : _uint32]
-        [buffer : _bytes]
-        [len : _size = (bytes-length buffer)]
+        [buffer : (_bytes o len)]
+        [len : _size]
         -> _void)
   #:c-id flif_image_read_row_RGBA16)
 
 ; buffer is originally void*, so this might not be needed when
 ; programming in racket?
 (define/flif flif-free-memory!
-  (_fun [buffer : _bytes] -> _void)
+  (_fun [buffer : _gcpointer] -> _void)
   #:c-id flif_free_memory)
