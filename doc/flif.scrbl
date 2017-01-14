@@ -27,7 +27,8 @@
               @defproc[(flif-create-image-gray [width integer?] [height integer?]) _FLIF-IMAGE]
               @defproc[(flif-create-image-palette [width integer?] [height integer?]) _FLIF-IMAGE]
               @defproc[(flif-create-image-hdr [width integer?] [height integer?]) _FLIF-IMAGE])]{
-  Creates a pointer to a @racket[_FLIF-IMAGE] struct.
+  Creates a pointer to a @racket[_FLIF-IMAGE] struct. Note:
+  @racket[flif-create-image] is RGBA.
 }
 
 @deftogether[(@defproc[(flif-import-image-rgba! [width integer?]
@@ -95,7 +96,7 @@
   Sets the metadata for the image.
 }
 
-@defproc[(flif-image-free-metadata! [image _FLIF-IMAGE] [data gcpointer?]) void?]{
+@defproc[(flif-image-free-metadata! [image _FLIF-IMAGE] [data cpointer?]) void?]{
   Free the data pointer returned by @racket[flif-image-get-metadata] --
   this function is largely worthless because there is no pointer to free and it
   is visible to the garbage collector anyway. However, just for gits and
@@ -135,7 +136,7 @@
   string of length @racket[len] with the row pixels inside.
 }
 
-@defproc[(flif-free-memory! [buffer gcpointer?]) void?]{
+@defproc[(flif-free-memory! [buffer cpointer?]) void?]{
   Free the memory located inside the buffer gcpointer. Again, this is kind of
   a useless function.
 }
