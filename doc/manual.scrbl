@@ -13,5 +13,6 @@
 
 @include-section["flif.scrbl"]
 @include-section["dec.scrbl"]
+@include-section["enc.scrbl"]
 
 @index-section[]

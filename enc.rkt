@@ -57,7 +57,7 @@
 ; 0 = -N, 1 = -I (default: -I)
 (define/enc flif-encoder-set-interlaced!
   (_fun [encoder : _FLIF-ENCODER]
-        [interlaced : _uint32]
+        [interlaced? : _bool]
         -> _void)
   #:c-id flif_encoder_set_interlaced)
 
@@ -71,7 +71,7 @@
 ; 0 = -B, 1 = default
 (define/enc flif-encoder-set-auto-color-buckets!
   (_fun [encoder : _FLIF-ENCODER]
-        [acb : _uint32]
+        [acb? : _bool]
         -> _void)
   #:c-id flif_encoder_set_auto_color_buckets)
 
@@ -85,7 +85,7 @@
 ; default: 1 (-L)
 (define/enc flif-encoder-set-lookback!
   (_fun [encoder : _FLIF-ENCODER]
-        [lookback : _int32]
+        [lookback? : _bool]
         -> _void)
   #:c-id flif_encoder_set_lookback)
 
@@ -112,7 +112,8 @@
 
 ; 0 = default, 1 = -K
 (define/enc flif-encoder-set-alpha-zero-lossless!
-  (_fun [encoder : _FLIF-ENCODER] -> _void)
+  (_fun [encoder : _FLIF-ENCODER]
+        [azl? : _bool] -> _void)
   #:c-id flif_encoder_set_alpha_zero_lossless)
 
 ; default: 2 (-X)
@@ -139,21 +140,21 @@
 ; 0 = -C, 1 = default
 (define/enc flif-encoder-set-channel-compact!
   (_fun [encoder : _FLIF-ENCODER]
-        [plc : _uint32]
+        [plc? : _bool]
         -> _void)
   #:c-id flif_encoder_set_channel_compact)
 
 ; 0 = -Y, 1 = default
 (define/enc flif-encoder-set-ycocg!
   (_fun [encoder : _FLIF-ENCODER]
-        [ycocg : _uint32]
+        [ycocg? : _bool]
         -> _void)
   #:c-id flif_encoder_set_ycocg)
 
 ; 0 = -S, 1 = default
 (define/enc flif-encoder-set-frame-shape!
   (_fun [encoder : _FLIF-ENCODER]
-        [rfs : _uint32]
+        [rfs? : _bool]
         -> _void)
   #:c-id flif_encoder_set_frame_shape)
 

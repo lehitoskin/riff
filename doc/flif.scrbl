@@ -13,7 +13,7 @@
   data contained inside an existing FLIF.
 }
 
-@deftogether[(@defthing[_FLIF-IMAGE ctype?])]{
+@defthing[_FLIF-IMAGE ctype?]{
   This ctype is the basis for the functions in this section. It is associated
   with an image itself - either from file or its bytes.
 }
