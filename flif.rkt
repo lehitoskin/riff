@@ -148,17 +148,23 @@
 
 ; perhaps data is a byte buffer and len is how much we should read?
 ; should ask the devs how this is supposed to work...
+; chunknames: eXmp, eXif
 (define/flif flif-image-get-metadata
-  (_fun [image : _FLIF-IMAGE]
+  (_fun (image chunkname) ::
+        [image : _FLIF-IMAGE]
         [chunkname : _string]
-        [data : (_ptr o _gcpointer)]
-        [len : (_box _size)]
+        [data : (_ptr o _bytes)]
+        [len : (_box _size) = (box 0)]
         -> _void
-        -> (let ()
-             (flif-image-free-metadata! image data)
-             (for/fold ([bstr #""])
-                       ([i (in-range (unbox len))])
-               (bytes-append bstr (ptr-ref data _byte i)))))
+        -> (let ([metadata
+                  (if (zero? (unbox len))
+                      #""
+                      (for/fold ([bstr #""])
+                                ([i (in-range (unbox len))])
+                        (bytes-append bstr (bytes (ptr-ref data _byte i)))))])
+             (unless (zero? (unbox len))
+               (flif-image-free-metadata! image data))
+             metadata))
   #:c-id flif_image_get_metadata)
 
 (define/flif flif-image-free-metadata!

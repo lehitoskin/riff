@@ -149,15 +149,20 @@ control.
   (define in (if (bytes? img)
                  (open-input-bytes img)
                  (open-input-file img)))
-  (define pos (regexp-match-positions (byte-regexp (bytes 0)) in))
+  (define pos (regexp-match-peek-positions (byte-regexp (bytes 0)) in))
   (close-input-port in)
   (car pos))
 
-(define (read-dimension bstr [result 0] [pos 0])
-  (define byte (bytes-ref bstr pos))
-  (if (< byte #x80)
-      (list (+ pos 1) (+ result #x80))
-      (read-dimension bstr (arithmetic-shift (+ result (- byte #x80)) 7) (+ pos 1))))
+(define (read-dimension bstr)
+  (let loop ([result 0]
+             [pos 0])
+    ; do not loop forever!
+    (cond [(< pos 10)
+           (define byte (bytes-ref bstr pos))
+           (if (< byte #x80)
+               (list (+ pos 1) (+ result byte 1))
+               (loop (arithmetic-shift (+ result (- byte #x80)) 7) (+ pos 1)))]
+          [else (list (+ pos 1) (+ result 1))])))
 
 (define/contract (flif-dimensions img)
   (flif? . => . list?)
@@ -166,7 +171,7 @@ control.
                  (open-input-file img)))
   (define pos (flif-data-pos img))
   (define before (peek-bytes (car pos) 0 in))
-  ; contains the width, height, (channels, bit-depth, and animation frames)
+  ; contains the width, height, (channels, bit-depth, etc)
   (define w+h+f (subbytes before 6))
   (close-input-port in)
   (define width (read-dimension w+h+f))
