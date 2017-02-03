@@ -34,8 +34,9 @@
   #:c-id flif_encoder_encode_file)
 
 ; encode to memory
-(define/enc flif-encoder-encode-memory!
-  (_fun [encoder : _FLIF-ENCODER]
+(define/enc flif-encoder-encode-memory
+  (_fun (encoder) ::
+        [encoder : _FLIF-ENCODER]
         [buffer : (_ptr o _gcpointer)]
         [size : (_box _size) = (box 0)]
         -> (success : _bool)

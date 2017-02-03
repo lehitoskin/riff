@@ -222,7 +222,8 @@
         [row : _uint32]
         [buffer : (_bytes o len)]
         [len : _size]
-        -> _void)
+        -> _void
+        -> buffer)
   #:c-id flif_image_read_row_RGBA8)
 
 (define/flif flif-image-write-row-rgba16!
@@ -240,7 +241,8 @@
         [row : _uint32]
         [buffer : (_bytes o len)]
         [len : _size]
-        -> _void)
+        -> _void
+        -> buffer)
   #:c-id flif_image_read_row_RGBA16)
 
 ; buffer is originally void*, so this might not be needed when

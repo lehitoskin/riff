@@ -153,6 +153,12 @@ control.
   (close-input-port in)
   (car pos))
 
+; read the first variable-width big-endian dimension and return
+; a pair with the amount of bytes read as the car and the
+; dimension size as the cdr
+;
+; see https://github.com/FLIF-hub/FLIF/blob/master/src/flif-dec.cpp#L836-L850
+; for implementation details
 (define (read-dimension bstr)
   (let loop ([result 0]
              [pos 0])
@@ -164,6 +170,7 @@ control.
                (loop (arithmetic-shift (+ result (- byte #x80)) 7) (+ pos 1)))]
           [else (list (+ pos 1) (+ result 1))])))
 
+; read FLIF bytes or file and return the pair '(width height)
 (define/contract (flif-dimensions img)
   (flif? . => . list?)
   (define in (if (bytes? img)
@@ -171,6 +178,7 @@ control.
                  (open-input-file img)))
   (define pos (flif-data-pos img))
   (define before (peek-bytes (car pos) 0 in))
+  ; skip the first 6 bytes (magic number)
   ; contains the width, height, (channels, bit-depth, etc)
   (define w+h+f (subbytes before 6))
   (close-input-port in)
