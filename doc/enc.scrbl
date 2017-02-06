@@ -6,11 +6,7 @@
                      "../enc.rkt"
                      "../flif.rkt"))
 
-@title[#:tag "enc"]{Encoder FLIF Functions}
-
-@defmodule[riff/enc]{
-  @racketmodname[riff/enc] contains definitions for encoding FLIF data.
-}
+@title[#:tag "enc"]{Encoder Functions}
 
 @defthing[_FLIF-ENCODER ctype?]{
   This ctype is the basis for the functions in this section. It is associated

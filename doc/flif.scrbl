@@ -7,12 +7,6 @@
 
 @title[#:tag "flif"]{Common FLIF Functions}
 
-@defmodule[riff/flif]{
-  @racketmodname[riff/flif] contains definitions common to the rest of the
-  wrapper. It can create FLIF images from scratch and it can view the
-  data contained inside an existing FLIF.
-}
-
 @defthing[_FLIF-IMAGE ctype?]{
   This ctype is the basis for the functions in this section. It is associated
   with an image itself - either from file or its bytes.

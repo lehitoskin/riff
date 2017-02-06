@@ -5,11 +5,7 @@
                      "../dec.rkt"
                      "../flif.rkt"))
 
-@title[#:tag "dec"]{Decoder FLIF Functions}
-
-@defmodule[riff/dec]{
-  @racketmodname[riff/dec] contains definitions for decoding FLIF data.
-}
+@title[#:tag "dec"]{Decoder Functions}
 
 @deftogether[(@defthing[_FLIF-DECODER ctype?]
               @defthing[_FLIF-INFO ctype?])]{
