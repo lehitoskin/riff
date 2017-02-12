@@ -25,14 +25,11 @@
   (define in (if (bytes? img)
                  (open-input-bytes img)
                  (open-input-file img)))
-  (define bstr (if (bytes? img)
-                   img
-                   (peek-bytes (file-size img) 0 in)))
-  (define info (flif-read-info-from-memory bstr))
-  (define num (flif-info-num-images info))
-  (flif-destroy-info! info)
+  (define byte (peek-bytes 1 4 in))
   (close-input-port in)
-  (> num 1))
+  (case byte
+    [(#"Q" #"S" #"T" #"a" #"c" #"d") #t]
+    [else #f]))
 
 ; initialize a flif decoder
 (define/dec flif-create-decoder
