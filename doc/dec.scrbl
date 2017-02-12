@@ -13,6 +13,10 @@
   of the image you are working on.
 }
 
+@defproc[(flif-animated? [img flif?]) boolean?]{
+  Determine if the FLIF image provided is animated.
+}
+
 @defproc[(flif-create-decoder) _FLIF-DECODER]{
   Create a new pointer to a @racket[_FLIF-DECODER] struct.
 }
