@@ -20,6 +20,20 @@
 (define _FLIF-DECODER (_cpointer 'FLIF-DECODER _gcpointer))
 (define _FLIF-INFO (_cpointer/null 'FLIF-INFO _gcpointer))
 
+(define/contract (flif-animated? img)
+  (flif? . => . boolean?)
+  (define in (if (bytes? img)
+                 (open-input-bytes img)
+                 (open-input-file img)))
+  (define bstr (if (bytes? img)
+                   img
+                   (peek-bytes (file-size img) 0 in)))
+  (define info (flif-read-info-from-memory bstr))
+  (define num (flif-info-num-images info))
+  (flif-destroy-info! info)
+  (close-input-port in)
+  (> num 1))
+
 ; initialize a flif decoder
 (define/dec flif-create-decoder
   (_fun -> _FLIF-DECODER)
