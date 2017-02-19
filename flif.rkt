@@ -213,15 +213,21 @@
   #:c-id flif_image_write_row_RGBA8)
 
 ; see flif-image-get-metadata
-(define/flif flif-image-read-row-rgba8
-  (_fun (image row len) ::
-        [image : _FLIF-IMAGE]
+(define/flif flif-image-read-row-rgba8!
+  (_fun [image : _FLIF-IMAGE]
         [row : _uint32]
-        [buffer : (_bytes o len)]
+        [buffer : _pointer]
         [len : _size]
-        -> _void
-        -> buffer)
+        -> _void)
   #:c-id flif_image_read_row_RGBA8)
+
+(define (flif-image-read-rgba8 image width height)
+  (define len (* width height 4))
+  (define pixels-ptr (malloc len _byte))
+  (for ([y (in-range height)])
+    (define offset-ptr (ptr-add pixels-ptr (* y width 4)))
+    (flif-image-read-row-rgba8! image y offset-ptr len))
+  (make-sized-byte-string pixels-ptr len))
 
 (define/flif flif-image-write-row-rgba16!
   (_fun [image : _FLIF-IMAGE]
@@ -232,15 +238,21 @@
   #:c-id flif_image_write_row_RGBA16)
 
 ; see flif-image-get-metadata
-(define/flif flif-image-read-row-rgba16
-  (_fun (image row len) ::
-        [image : _FLIF-IMAGE]
+(define/flif flif-image-read-row-rgba16!
+  (_fun [image : _FLIF-IMAGE]
         [row : _uint32]
-        [buffer : (_bytes o len)]
+        [buffer : _pointer]
         [len : _size]
-        -> _void
-        -> buffer)
+        -> _void)
   #:c-id flif_image_read_row_RGBA16)
+
+(define (flif-image-read-rgba16 image width height)
+  (define len (* width height 4))
+  (define pixels-ptr (malloc len _byte))
+  (for ([y (in-range height)])
+    (define offset-ptr (ptr-add pixels-ptr (* y width 4)))
+    (flif-image-read-row-rgba16! image y offset-ptr len))
+  (make-sized-byte-string pixels-ptr len))
 
 ; buffer is originally void*, so this might not be needed when
 ; programming in racket?
