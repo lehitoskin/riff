@@ -155,10 +155,7 @@
         [len : (_box _size) = (box 0)]
         -> (success : _bool)
         -> (cond [success
-                  (define metadata
-                    (for/fold ([bstr #""])
-                              ([i (in-range (unbox len))])
-                      (bytes-append bstr (bytes (ptr-ref data _byte i)))))
+                  (define metadata (make-sized-byte-string data (unbox len)))
                   (flif-image-free-metadata! image data)
                   metadata]
                  [else #""]))

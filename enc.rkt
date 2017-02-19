@@ -40,11 +40,9 @@
         [buffer : (_ptr o _gcpointer)]
         [size : (_box _size) = (box 0)]
         -> (success : _bool)
-        -> (cond [success
-                  (for/fold ([bstr #""])
-                            ([i (in-range (unbox size))])
-                    (bytes-append bstr (bytes (ptr-ref buffer _byte i))))]
-                 [else (raise-result-error 'flif-encoder-encode-memory! #t success)]))
+        -> (if success
+               (make-sized-byte-string buffer (unbox size))
+               (raise-result-error 'flif-encoder-encode-memory! #t success)))
   #:c-id flif_encoder_encode_memory)
 
 ; release an encoder (has to be called to prevent memory leaks)
