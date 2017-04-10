@@ -143,7 +143,7 @@ control.
 (define/dec flif-decoder-set-callback!
   (_fun [decoder : _FLIF-DECODER]
         [callback : _callback-t]
-        [user-data : (_cpointer _void)]
+        [user-data : _gcpointer]
         -> _void)
   #:c-id flif_decoder_set_callback)
 

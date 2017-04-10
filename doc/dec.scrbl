@@ -1,6 +1,6 @@
 #lang scribble/manual
 @; dec.scrbl
-@(require (for-label (only-in ffi/unsafe ctype?)
+@(require (for-label (only-in ffi/unsafe ctype? cpointer?)
                      racket/base
                      racket/contract
                      "../dec.rkt"
