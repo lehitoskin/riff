@@ -15,7 +15,7 @@
 }
 
 @defproc[(_callback-t [info _callback-info-t-pointer]
-                      [user-data ctype?]) void?]{
+                      [user-data cpointer?]) void?]{
   The generalized form of the progressive callback function.
 }
 

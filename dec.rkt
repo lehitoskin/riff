@@ -24,8 +24,8 @@
 
 (define _callback-t
   (_fun [info : _callback-info-t-pointer]
-        [user-data : (_cpointer _void)]
-        -> (_cpointer _uint32)))
+        [user-data : _gcpointer]
+        -> _uint32))
 
 (define _FLIF-DECODER (_cpointer 'FLIF-DECODER _gcpointer))
 (define _FLIF-INFO (_cpointer/null 'FLIF-INFO _gcpointer))
