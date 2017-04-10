@@ -17,6 +17,16 @@
 ; of specified type _string*/utf-8.
 (default-_string-type _string*/utf-8)
 
+(define-cstruct _callback-info-t
+  ([quality _uint32]
+   [bytes-read _int64]
+   [populate-context _gcpointer]))
+
+(define _callback-t
+  (_fun [info : _callback-info-t-pointer]
+        [user-data : (_cpointer _void)]
+        -> (_cpointer _uint32)))
+
 (define _FLIF-DECODER (_cpointer 'FLIF-DECODER _gcpointer))
 (define _FLIF-INFO (_cpointer/null 'FLIF-INFO _gcpointer))
 
@@ -66,6 +76,12 @@
         [index : _size]
         -> _FLIF-IMAGE)
   #:c-id flif_decoder_get_image)
+
+; generate a preview
+(define/dec flif-decoder-generate-preview
+  (_fun [info : _callback-info-t-pointer]
+        -> _void)
+  #:c-id flif_decoder_generate_preview)
 
 ; release a decoder (has to be run to avoid memory leaks)
 (define/dec flif-destroy-decoder!
@@ -126,9 +142,8 @@ control.
 ; valid quality: 0 - 10000
 (define/dec flif-decoder-set-callback!
   (_fun [decoder : _FLIF-DECODER]
-        [callback : (_fun [quality : _int32]
-                          [bytes-read : _int64]
-                          -> _uint32)]
+        [callback : _callback-t]
+        [user-data : (_cpointer _void)]
         -> _void)
   #:c-id flif_decoder_set_callback)
 

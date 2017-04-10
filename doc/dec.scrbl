@@ -1,11 +1,23 @@
 #lang scribble/manual
 @; dec.scrbl
-@(require (for-label racket/base
+@(require (for-label (only-in ffi/unsafe ctype?)
+                     racket/base
                      racket/contract
                      "../dec.rkt"
                      "../flif.rkt"))
 
 @title[#:tag "dec"]{Decoder Functions}
+
+@defstruct[_callback-info-t ([quality integer?]
+                             [bytes-read integer?]
+                             [populate-context ctype?])]{
+  A struct that contains information about the image for the progressive callback.
+}
+
+@defproc[(_callback-t [info _callback-info-t-pointer]
+                      [user-data ctype?]) void?]{
+  The generalized form of the progressive callback function.
+}
 
 @deftogether[(@defthing[_FLIF-DECODER ctype?]
               @defthing[_FLIF-INFO ctype?])]{
@@ -42,6 +54,10 @@
   Obtain the @racket[_FLIF-IMAGE] pointer to the frame located at @racket[index].
 }
 
+@defproc[(flif-decoder-generate-preview [info _callback-info-t-pointer]) void?]{
+  Generate a preview to display.
+}
+
 @defproc[(flif-destroy-decoder! [decoder _FLIF-DECODER]) void?]{
   Free memory associated with the pointer.
 }
@@ -76,11 +92,10 @@
 }
 
 @defproc[(flif-decoder-set-callback! [decoder _FLIF-DECODER]
-                                     [callback (integer? integer? . -> . integer?)]) void?]{
+                                     [callback _callback-t]
+                                     [user-data ctype?]) void?]{
   Set the decoder callback. Useful for progressive decoding where the callback
-  is called at every new level of quality achieved. The callback procedure takes
-  two arguments: quality and bytes-read and must return an integer that
-  indicates the next quality level desired.
+  is called at every new level of quality achieved.
 }
 
 @defproc[(flif-decoder-set-first-callback-quality! [decoder _FLIF-DECODER]

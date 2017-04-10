@@ -7,8 +7,8 @@
 (define primary-file "main.rkt")
 (define homepage "https://github.com/lehitoskin/riff/")
 
-(define version "0.1")
-(define release-notes '("Make interface a little more racket-y."))
+(define version "0.2")
+(define release-notes '("New progressive callback API"))
 
 (define required-core-version "6.1")
 

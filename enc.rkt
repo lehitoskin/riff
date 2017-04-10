@@ -19,12 +19,25 @@
 (define/enc flif-create-encoder (_fun -> _FLIF-ENCODER)
   #:c-id flif_create_encoder)
 
-; give it an image to encode; add more than one image to encode an animation
+; - give it an image to encode
+; - add more than one image to encode an animation
+; - it will CLONE the image (so the input image is not touched and you have to
+;   call flif_destroy_image on it yourself to free that memory)
 (define/enc flif-encoder-add-image!
   (_fun [encoder : _FLIF-ENCODER]
         [image : _FLIF-IMAGE]
         -> _void)
   #:c-id flif_encoder_add_image)
+
+; - give it an image to encode
+; - add more than one image to encode an animation
+; - it will MOVE the input image (input image becomes invalid during encode and
+;   flif_destroy_encoder will free it)
+(define/enc flif-encoder-add-image-move!
+  (_fun [encoder : _FLIF-ENCODER]
+        [image : _FLIF-IMAGE]
+        -> _void)
+  #:c-id flif_encoder_add_image_move)
 
 ; encode to a file
 (define/enc flif-encoder-encode-file!

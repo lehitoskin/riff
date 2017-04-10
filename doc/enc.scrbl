@@ -19,7 +19,14 @@
 
 @defproc[(flif-encoder-add-image! [encoder _FLIF-ENCODER] [image _FLIF-IMAGE]) void?]{
   Add the image onto the encoder --- add more than one image to create
-  an animation.
+  an animation. This function will @italic{clone} the image (so the input image is not
+  touched and you have to @racket[flif-destroy-image!] on it yourself to free the memory).
+}
+
+@defproc[(flif-encoder-add-image-move! [encoder _FLIF-ENCODER] [image _FLIF-IMAGE]) void?]{
+  Add the image onto the encoder --- add more than one image to create
+  an animation. This function will @italic{move} the image (input image
+  becomes invalid during encode and @racket[flif-destroy-encoder!] will free it.
 }
 
 @defproc[(flif-encoder-encode-file! [encoder _FLIF-ENCODER] [filename string?]) void?]{

@@ -101,33 +101,49 @@
 @deftogether[(@defproc[(flif-image-write-row-palette8! [image _FLIF-IMAGE]
                                                        [row integer?]
                                                        [buffer bytes?]) void?]
-              @defproc[(flif-image-read-row-palette8 [image _FLIF-IMAGE]
-                                                     [row integer?]
-                                                     [len integer?]) bytes?]
+              @defproc[(flif-image-read-row-palette8! [image _FLIF-IMAGE]
+                                                      [row integer?]
+                                                      [len integer?]) bytes?]
+              @defproc[(flif-image-read-palette8 [image _FLIF-IMAGE]
+                                                 [width integer?]
+                                                 [height integer?]) bytes?]
               @defproc[(flif-image-write-row-gray8! [image _FLIF-IMAGE]
                                                     [row integer?]
                                                     [buffer bytes?]) void?]
-              @defproc[(flif-image-read-row-gray8 [image _FLIF-IMAGE]
-                                                  [row integer?]
-                                                  [len integer?]) bytes?]
+              @defproc[(flif-image-read-row-gray8! [image _FLIF-IMAGE]
+                                                   [row integer?]
+                                                   [len integer?]) bytes?]
+              @defproc[(flif-image-read-gray8 [image _FLIF-IMAGE]
+                                              [width integer?]
+                                              [height integer?]) bytes?]
               @defproc[(flif-image-write-row-rgba8! [image _FLIF-IMAGE]
                                                     [row integer?]
                                                     [buffer bytes?]) void?]
-              @defproc[(flif-image-read-row-rgba8 [image _FLIF-IMAGE]
-                                                  [row integer?]
-                                                  [len integer?]) bytes?])]{
-  Read or write 8-bit depth image data. Read functions will return a byte
-  string of length @racket[len] with the row pixels inside.
+              @defproc[(flif-image-read-row-rgba8! [image _FLIF-IMAGE]
+                                                   [row integer?]
+                                                   [len integer?]) bytes?]
+              @defproc[(flif-image-read-rgba8 [image _FLIF-IMAGE]
+                                              [width integer?]
+                                              [height integer?]) bytes?])]{
+  Read or write 8-bit depth image data. read-row-@italic{type} functions will
+  return a byte string of length @racket[len] with the row pixels inside, while
+  read-@italic{type} functions will reaturn a byte string @racket[width] x
+  @racket[height] in size.
 }
 
 @deftogether[(@defproc[(flif-image-write-row-rgba16! [image _FLIF-IMAGE]
                                                      [row integer?]
                                                      [buffer bytes?]) void?]
-              @defproc[(flif-image-read-row-rgba16 [image _FLIF-IMAGE]
-                                                   [row integer?]
-                                                   [len integer?]) bytes?])]{
-  Read or write 16-bit depth image data. Read functions will return a byte
-  string of length @racket[len] with the row pixels inside.
+              @defproc[(flif-image-read-row-rgba16! [image _FLIF-IMAGE]
+                                                    [row integer?]
+                                                    [len integer?]) bytes?]
+              @defproc[(flif-image-read-rgba16 [image _FLIF-IMAGE]
+                                               [width integer?]
+                                               [height integer?]) bytes?])]{
+  Read or write 16-bit depth image data. read-row-@italic{type} functions will
+  return a byte string of length @racket[len] with the row pixels inside, while
+  read-@italic{type} functions will reaturn a byte string @racket[width] x
+  @racket[height] in size.
 }
 
 @defproc[(flif-free-memory! [buffer cpointer?]) void?]{
