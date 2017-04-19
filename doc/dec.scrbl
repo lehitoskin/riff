@@ -8,14 +8,11 @@
 
 @title[#:tag "dec"]{Decoder Functions}
 
-@defstruct[_callback-info-t ([quality integer?]
-                             [bytes-read integer?]
-                             [populate-context ctype?])]{
-  A struct that contains information about the image for the progressive callback.
-}
-
-@defproc[(_callback-t [info _callback-info-t-pointer]
-                      [user-data cpointer?]) void?]{
+@defproc[(_callback-t [quality integer?]
+                      [bytes-read integer?]
+                      [decode-over? boolean?]
+                      [user-data cpointer?]
+                      [context cpointer?]) integer?]{
   The generalized form of the progressive callback function.
 }
 
@@ -54,7 +51,7 @@
   Obtain the @racket[_FLIF-IMAGE] pointer to the frame located at @racket[index].
 }
 
-@defproc[(flif-decoder-generate-preview [info _callback-info-t-pointer]) void?]{
+@defproc[(flif-decoder-generate-preview [context cpointer?]) void?]{
   Generate a preview to display.
 }
 

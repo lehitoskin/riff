@@ -17,14 +17,12 @@
 ; of specified type _string*/utf-8.
 (default-_string-type _string*/utf-8)
 
-(define-cstruct _callback-info-t
-  ([quality _uint32]
-   [bytes-read _int64]
-   [populate-context _gcpointer]))
-
 (define _callback-t
-  (_fun [info : _callback-info-t-pointer]
+  (_fun [quality : _uint32]
+        [bytes-read : _int64]
+        [decode-over? : _bool]
         [user-data : _gcpointer]
+        [context : _gcpointer]
         -> _uint32))
 
 (define _FLIF-DECODER (_cpointer 'FLIF-DECODER _gcpointer))
@@ -79,7 +77,7 @@
 
 ; generate a preview
 (define/dec flif-decoder-generate-preview
-  (_fun [info : _callback-info-t-pointer]
+  (_fun [context : _gcpointer]
         -> _void)
   #:c-id flif_decoder_generate_preview)
 
