@@ -42,6 +42,12 @@
         -> _FLIF-IMAGE)
   #:c-id flif_create_image_GRAY)
 
+(define/flif flif-create-image-gray16
+  (_fun [width : _uint32]
+        [height : _uint32]
+        -> _FLIF-IMAGE)
+  #:c-id flif_create_image_GRAY16)
+
 (define/flif flif-create-image-palette
   (_fun [width : _uint32]
         [height : _uint32]
@@ -62,7 +68,7 @@
         -> _FLIF-IMAGE)
   #:c-id flif_import_image_RGBA)
 
-(define/flif flif-import-image-rgb!
+(define/flif flif-import-image-rgb!image-fr
   (_fun [width : _uint32]
         [height : _uint32]
         [rgb : _bytes]
@@ -71,6 +77,14 @@
   #:c-id flif_import_image_RGB)
 
 (define/flif flif-import-image-gray!
+  (_fun [width : _uint32]
+        [height : _uint32]
+        [gray : _bytes]
+        [stride : _uint32]
+        -> _FLIF-IMAGE)
+  #:c-id flif_import_image_GRAY)
+
+(define/flif flif-import-image-gray16!
   (_fun [width : _uint32]
         [height : _uint32]
         [gray : _bytes]
@@ -176,10 +190,9 @@
   #:c-id flif_image_write_row_PALETTE8)
 
 (define/flif flif-image-read-row-palette8!
-  (_fun (image row len) ::
-        [image : _FLIF-IMAGE]
+  (_fun [image : _FLIF-IMAGE]
         [row : _uint32]
-        [buffer : (_bytes o len)]
+        [buffer : _pointer]
         [len : _size]
         -> _void)
   #:c-id flif_image_read_row_PALETTE8)
@@ -201,10 +214,9 @@
   #:c-id flif_image_write_row_GRAY8)
 
 (define/flif flif-image-read-row-gray8!
-  (_fun (image row len) ::
-        [image : _FLIF-IMAGE]
+  (_fun [image : _FLIF-IMAGE]
         [row : _uint32]
-        [buffer : (_bytes o len)]
+        [buffer : _pointer]
         [len : _size]
         -> _void)
   #:c-id flif_image_read_row_GRAY8)
@@ -214,7 +226,31 @@
   (define pixels-ptr (malloc len _byte))
   (for ([y (in-range height)])
     (define offset-ptr (ptr-add pixels-ptr (* y width 4)))
-    (flif-image-read-row-rgba8! image y offset-ptr len))
+    (flif-image-read-row-gray8! image y offset-ptr len))
+  (make-sized-byte-string pixels-ptr len))
+
+(define/flif flif-image-write-row-gray16!
+  (_fun [image : _FLIF-IMAGE]
+        [row : _uint32]
+        [buffer : _bytes]
+        [len : _size = (bytes-length buffer)]
+        -> _void)
+  #:c-id flif_image_write_row_GRAY16)
+
+(define/flif flif-image-read-row-gray16!
+  (_fun [image : _FLIF-IMAGE]
+        [row : _uint32]
+        [buffer : _pointer]
+        [len : _size]
+        -> _void)
+  #:c-id flif_image_read_row_GRAY16)
+
+(define (flif-image-read-gray16 image width height)
+  (define len (* width height 4))
+  (define pixels-ptr (malloc len _byte))
+  (for ([y (in-range height)])
+    (define offset-ptr (ptr-add pixels-ptr (* y width 4)))
+    (flif-image-read-row-gray16! image y offset-ptr len))
   (make-sized-byte-string pixels-ptr len))
 
 (define/flif flif-image-write-row-rgba8!
