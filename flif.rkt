@@ -68,7 +68,7 @@
         -> _FLIF-IMAGE)
   #:c-id flif_import_image_RGBA)
 
-(define/flif flif-import-image-rgb!image-fr
+(define/flif flif-import-image-rgb!
   (_fun [width : _uint32]
         [height : _uint32]
         [rgb : _bytes]
