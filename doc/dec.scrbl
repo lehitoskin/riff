@@ -31,10 +31,14 @@
 }
 
 @deftogether[(@defproc[(flif-decoder-decode-file! [decoder _FLIF-DECODER]
-                                                  [file string?]) void?]
+                                                  [file string?]) boolean?]
               @defproc[(flif-decoder-decode-memory! [decoder _FLIF-DECODER]
-                                                    [buffer bytes?]) void?])]{
-  Decode the FLIF either from a string to the file or from its bytes.
+                                                    [buffer bytes?]) boolean?]
+              @defproc[(flif-decoder-decode-filepointer! [decoder _FLIF-DECODER]
+                                                         [filepointer cpointer?]
+                                                         [filename string?]) boolean?])]{
+  Decode the FLIF either from a string to the file, from its bytes,
+  or from a filepointer.
 }
 
 @defproc[(flif-decoder-num-images [decoder _FLIF-DECODER]) integer?]{

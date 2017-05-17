@@ -58,6 +58,18 @@
         -> _bool)
   #:c-id flif_decoder_decode_memory)
 
+#|
+Decode a given FLIF from a file pointer
+The filename here is used for error messages.
+It would be helpful to pass an actual filename here, but a non-NULL dummy one can be used instead.
+|#
+(define/dec flif-decoder-decode-filepointer!
+  (_fun [decoder : _FLIF-DECODER]
+        [filepointer : _pointer]
+        [filename : _string]
+        -> _bool)
+  #:c-id flif_decoder_decode_filepointer)
+
 ; returns the number of frames
 (define/dec flif-decoder-num-images
   (_fun [decoder : _FLIF-DECODER] -> _size)
